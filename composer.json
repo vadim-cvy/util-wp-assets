@@ -1,0 +1,8 @@
+{
+  "name": "cvy/util-wp-assets",
+  "autoload": {
+    "psr-4": {
+      "Cvy\\WP\\Assets\\": "src/"
+    }
+  }
+}
