@@ -5,20 +5,23 @@ use \Exception;
 
 class Main
 {
-  static protected $app_root_namespace;
+  static private $app_namespace;
 
-  static public function set_app_root_namespace( string $app_root_namespace ) : void
+  static public function set_app_namespace( string $app_namespace ) : void
   {
-    static::$app_root_namespace = $app_root_namespace;
+    static::$app_namespace = $app_namespace;
   }
 
-  static public function get_app_root_namespace() : string
+  static public function get_app_namespace() : string
   {
-    if ( ! static::$app_root_namespace )
+    if ( ! static::$app_namespace )
     {
-      throw new Exception( 'App root namespace is not set!' );
+      throw new Exception(sprintf(
+        'App namespace is not set! Use %s::set_app_namespace().',
+        get_called_class()
+      ));
     }
 
-    return static::$app_root_namespace;
+    return static::$app_namespace;
   }
 }

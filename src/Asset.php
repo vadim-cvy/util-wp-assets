@@ -3,7 +3,7 @@ namespace Cvy\WP\Assets;
 
 abstract class Asset
 {
-  protected $rel_path;
+  private $rel_path;
 
   protected $deps;
 
@@ -19,44 +19,45 @@ abstract class Asset
 
     if ( ! did_action( $hook_name ) && current_action() !== $hook_name )
     {
-      add_action( $hook_name, [ $this, '_on_enqueue_scripts_hook' ] );
+      add_action( $hook_name, $this->on_enqueue_scripts_hook() );
     }
     else
     {
-      $this->_on_enqueue_scripts_hook();
+      $this->on_enqueue_scripts_hook();
     }
   }
 
-  abstract public function _on_enqueue_scripts_hook() : void;
+  abstract protected function on_enqueue_scripts_hook() : void;
 
   protected function get_root_dir_rel_path() : string
   {
     return 'assets/';
   }
 
-  protected function get_path() : string
+  private function get_path() : string
   {
     return get_theme_file_path( $this->get_root_dir_rel_path() . $this->rel_path );
   }
 
-  protected function get_url() : string
+  final protected function get_url() : string
   {
+    // todo: make it work for plugins as well
     return get_theme_file_uri( $this->get_root_dir_rel_path() . $this->rel_path );
   }
 
-  protected function get_handle() : string
+  final protected function get_handle() : string
   {
     $rel_path = $this->rel_path;
 
     $file_extension_pattern = '~\..*~';
     $rel_path = preg_replace( $file_extension_pattern, '', $rel_path );
 
-    $prefix = strtolower( Main::get_app_root_namespace() );
+    $prefix = strtolower( Main::get_app_namespace() );
 
     return $prefix . '_' . str_replace( '/', '_', $rel_path );
   }
 
-  protected function get_ver() : string
+  final protected function get_ver() : string
   {
     return filemtime( $this->get_path() );
   }
