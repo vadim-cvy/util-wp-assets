@@ -19,7 +19,7 @@ abstract class Asset
 
     if ( ! did_action( $hook_name ) && current_action() !== $hook_name )
     {
-      add_action( $hook_name, $this->on_enqueue_scripts_hook() );
+      add_action( $hook_name, fn() => $this->on_enqueue_scripts_hook() );
     }
     else
     {
